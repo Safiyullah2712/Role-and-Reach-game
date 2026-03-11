@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Board Game</title>
+    <link rel="stylesheet" href="board.css">
+</head>
+
+<body>
+    <div id="welcomePage" class="welcome-container">
+        <div class="welcome-box">
+            <h2>Roll & Reach</h2>
+            <select id="numPlayers" class="num-players-select">
+                <option value="2" selected>2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4">4 Players</option>
+            </select>
+            <div id="playerInputs">
+                <input type="text" id="player1Input" placeholder="Enter Player 1 name" maxlength="15">
+                <input type="text" id="player2Input" placeholder="Enter Player 2 name" maxlength="15">
+            </div>
+            <button id="startBtn" class="start-button">Start Game</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" style="display: none;">
+        <h1>Roll & Reach</h1>
+
+        <div class="controls">
+            <div id="status">Player 1, roll a 1 to start!</div>
+            <div class="dice-controls">
+                <div class="dice-container" id="diceContainer">
+                    <img id="diceImage" src="images/one.png" alt="Dice">
+                </div>
+                <button id="restartBtn">Restart</button>
+            </div>
+        </div>
+
+        <div class="game-layout">
+            <div id="leftSide" class="player-side-container"></div>
+            <div id="board"></div>
+            <div id="rightSide" class="player-side-container"></div>
+        </div>
+    </div>
+
+    <div id="victoryModal" class="modal">
+        <div class="modal-content">
+            <h2 id="victoryMessage">Player 1 Wins!</h2>
+            <button id="modalCloseBtn">Close</button>
+            <button id="modalRestartBtn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="board.js"></script>
+</body>
+
+</html>
