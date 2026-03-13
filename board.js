@@ -97,6 +97,7 @@ function startGame() {
     });
 
     updateUI();
+    drawSpecialLines();
 
     const restartBtn = document.getElementById('restartBtn');
     const diceContainer = document.getElementById('diceContainer');
@@ -109,6 +110,7 @@ function startGame() {
         if (!isRolling && !gameOver) rollDice();
     });
     setupModalListeners();
+    window.addEventListener('resize', drawSpecialLines);
 }
 
 function restartGame() {
@@ -162,17 +164,68 @@ function createBoard() {
             cell.innerText = num;
 
             if (LADDERS[num] || SNAKES[num]) {
-                const dest = LADDERS[num] || SNAKES[num];
-                const destSpan = document.createElement('span');
-                destSpan.className = 'dest-num';
-                destSpan.innerText = dest;
-                cell.appendChild(destSpan);
-
                 if (LADDERS[num]) cell.classList.add('ladder');
                 if (SNAKES[num]) cell.classList.add('snake');
             }
             board.appendChild(cell);
         });
+    }
+}
+
+function drawSpecialLines() {
+    const svg = document.getElementById('specialLines');
+    if (!svg) return;
+    svg.innerHTML = '';
+    const board = document.getElementById('board');
+    if (!board) return;
+    const boardRect = board.getBoundingClientRect();
+
+    const drawPath = (start, end, type) => {
+        const startEl = document.getElementById('cell-' + start);
+        const endEl = document.getElementById('cell-' + end);
+        if (!startEl || !endEl) return;
+
+        const startRect = startEl.getBoundingClientRect();
+        const endRect = endEl.getBoundingClientRect();
+
+        const x1 = startRect.left - boardRect.left + startRect.width / 2;
+        const y1 = startRect.top - boardRect.top + startRect.height / 2;
+        const x2 = endRect.left - boardRect.left + endRect.width / 2;
+        const y2 = endRect.top - boardRect.top + endRect.height / 2;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        let d = "";
+
+        if (type === 'snake') {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            const px = -dy / dist;
+            const py = dx / dist;
+            
+            const offset = dist * 0.2;
+            
+            const cp1x = x1 + dx * 0.33 + px * offset;
+            const cp1y = y1 + dy * 0.33 + py * offset;
+            const cp2x = x1 + dx * 0.66 - px * offset;
+            const cp2y = y1 + dy * 0.66 - py * offset;
+            
+            d = `M ${x1} ${y1} C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${x2} ${y2}`;
+        } else {
+            d = `M ${x1} ${y1} L ${x2} ${y2}`;
+        }
+
+        path.setAttribute('d', d);
+        path.setAttribute('class', `special-line ${type}-line`);
+        svg.appendChild(path);
+    };
+
+    for (const [start, end] of Object.entries(LADDERS)) {
+        drawPath(start, end, 'ladder');
+    }
+    for (const [start, end] of Object.entries(SNAKES)) {
+        drawPath(start, end, 'snake');
     }
 }
 

@@ -49,19 +49,50 @@ h1 {
     font-size: 14px;
 }
 
+#boardContainer {
+    position: relative;
+    width: max-content;
+    margin: 30px auto;
+}
+
 #board {
     display: grid;
     grid-template-columns: repeat(10, 50px);
     grid-template-rows: repeat(10, 50px);
     width: max-content;
     gap: 0;
-    margin: 30px auto;
     border: 4px solid #495057;
     background-color: #dee2e6;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     overflow: hidden;
 }
+
+#specialLines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 508px;
+    height: 508px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.special-line {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    opacity: 0.7;
+}
+
+.ladder-line {
+    stroke: #2ecc71;
+}
+
+.snake-line {
+    stroke: #e74c3c;
+}
+
 
 .cell {
     width: 50px;
@@ -455,34 +486,10 @@ button:disabled {
     font-weight: bold;
 }
 
-.cell.ladder::after {
-    content: "▲";
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 10px;
-}
-
 .cell.snake {
     background-color: #fff5f5;
     color: #b71c1c;
     font-weight: bold;
 }
 
-.cell.snake::after {
-    content: "▼";
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 10px;
-}
-
-.dest-num {
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-    font-size: 10px;
-    font-weight: normal;
-    color: inherit;
-    opacity: 0.7;
-}
+
